@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>mini KID'S CLOTHES</title>
+
+    <!--the first link is for Bootstrap's designs-->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" 
+    integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    <!--the second link is for Bootstrap's icons-->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css" rel="stylesheet">
+
+    <!--link for our CSS-->
+    <link rel="stylesheet" href="styles.css"/>
+</head>
+<body>
+
+    <section id="header"> <!-- this section is for the upper part of the page-->
+        <!--importing a logo picture from the same folder-->
+        <a href="#"><img src="logo5.png" class="logo" alt="" style="width: 200px"></a>
+
+        <div>
+            <ul id="navbar">
+                <li><a href="store.html">Home</a></li>
+                <li><a href="shop.html">Shop</a></li>    
+                <!--creating icons from Bootstrap-->
+                <li id="logIn"><a class="active" href="logIn.html"><i class="bi bi-person-fill"></i></a></li>
+                <li><a href="cart.html"><i class="bi bi-bag"></i></a></li>
+            </ul>
+        </div>
+    </section>
+
+    <div class="login-body">
+        <div class="wrapper">
+            <form action="">
+                <h2>Login</h2>
+                <!--Username field-->
+                <div class="input-box">
+                    <input type="text" id="Username" placeholder="Username" required>
+                    <i class="bi bi-person"></i>
+                </div>
+                <!--Password field-->
+                <div class="input-box">
+                    <input type="password" placeholder="Password" required>
+                    <i class="bi bi-lock"></i>
+                </div>
+                <!--checkbox & 'forgot password?'link-->
+                <div class="remember-forgot">
+                    <label> <input type="checkbox">Remember me</label>
+                    <a href="#">Forgot password?</a>
+                </div>
+                <!--Login buttom & 'Don't have a password?'link-->
+                <button type="submit" class="button" onclick="save()">Login</button>
+                <div class="register-link">
+                    <p>Don't have a password? <a href="#">Register</a></p>
+                </div>
+            </form>
+        </div>        
+    </div>
+
+
+
+
+
+    <!--link for our JS-->
+    <script src="store.js"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" 
+    integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
+    
+</body>
+</html>
