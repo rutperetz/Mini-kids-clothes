@@ -2,6 +2,8 @@ import express from 'express';
 import cors from 'cors';
 import morgan from 'morgan';
 import mongoose from 'mongoose';
+import productsRouter from './routes/products.routes.js';//חיבור נתיב ראשי לשרת
+
 
 
 const app = express();
@@ -17,6 +19,8 @@ app.use(morgan('dev'));
 app.get('/api/health', (req, res) => {
   res.json({ ok: true, msg: 'server is up' });
 });
+
+app.use('/api/products', productsRouter);//“תן לקובץ products.routes.js לטפל בכל בקשה שמתחילה ב־/api/products.”
 
 export default app;
 
