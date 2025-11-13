@@ -3,6 +3,7 @@ import cors from 'cors';
 import morgan from 'morgan';
 import mongoose from 'mongoose';
 import productsRouter from './routes/products.routes.js';//חיבור נתיב ראשי לשרת
+import authRouter from './routes/auth.routes.js';
 
 
 
@@ -21,6 +22,8 @@ app.get('/api/health', (req, res) => {
 });
 
 app.use('/api/products', productsRouter);//“תן לקובץ products.routes.js לטפל בכל בקשה שמתחילה ב־/api/products.”
+app.use('/api/auth', authRouter);
+
 
 export default app;
 
