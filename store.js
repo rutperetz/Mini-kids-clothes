@@ -4,7 +4,7 @@ if (document.readyState == 'loading') {
     ready();
 }
 
-function ready() 
+async function ready() 
 {
 
     var cartItems = document.getElementsByClassName('cart-items')[0];
@@ -12,7 +12,7 @@ function ready()
     if (storedCart !=null)
         cartItems.innerHTML = storedCart; 
 
-    
+    await loadProductsFromServer();
 
     updateCartTotal()
     
@@ -41,6 +41,50 @@ function ready()
         document.getElementsByClassName('btn-purchase')[0].addEventListener('click', purchaseClicked)
 
 }
+
+async function loadProductsFromServer() {
+    try {
+        // קריאת כל המוצרים מהשרת
+        const res = await fetch("http://localhost:3000/api/products");
+        if (!res.ok) {
+            console.error("בעיה בקריאת מוצרים מהשרת", res.status);
+            return;
+        }
+
+        const products = await res.json(); // מערך של מוצרים ממונגו
+        console.log("מוצרים מהשרת:", products);
+
+        // מוצאים את הקונטיינר של המוצרים בדף
+        const shopItemsContainer = document.querySelector(".shop-items");
+        shopItemsContainer.innerHTML = ""; // לוודא שהקונטיינר ריק
+
+        // עבור כל מוצר – ניצור HTML כמו שהיה קודם
+        products.forEach((product) => {
+            // product.title, product.price, product.imageUrl, product.description
+
+            const itemDiv = document.createElement("div");
+            itemDiv.classList.add("shop-item");
+
+            itemDiv.innerHTML = `
+                <img class="shop-item-image" src="${product.imageUrl}">
+                <span class="shop-item-title">${product.title}</span>
+                <span class="shop-item-d">${product.description || ""}</span>
+                <div class="shop-item-details">
+                    <span class="shop-item-price">$${product.price}</span>
+                    <button class="btn btn-primary shop-item-button" type="button">ADD TO CART</button>
+                </div>
+            `;
+
+            shopItemsContainer.appendChild(itemDiv);
+        });
+
+    } catch (err) {
+        console.error("שגיאה בטעינת מוצרים מהשרת:", err);
+    }
+}
+
+
+
 
 function purchaseClicked() {
     var ok =confirm("Continue to purchase?");

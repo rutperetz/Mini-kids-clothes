@@ -5,6 +5,7 @@ import mongoose from 'mongoose';
 import productsRouter from './routes/products.routes.js';//חיבור נתיב ראשי לשרת
 import authRouter from './routes/auth.routes.js';
 import ordersRouter from './routes/orders.routes.js';
+import usersRouter from "./routes/users.routes.js";
 
 
 
@@ -25,6 +26,7 @@ app.get('/api/health', (req, res) => {
 app.use('/api/products', productsRouter);//“תן לקובץ products.routes.js לטפל בכל בקשה שמתחילה ב־/api/products.”
 app.use('/api/auth', authRouter);
 app.use('/api/orders', ordersRouter);
+app.use("/api/users", usersRouter);
 
 
 
