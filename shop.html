@@ -30,6 +30,10 @@
                     <li id="logIn"><a href="logIn.html"><i class="bi bi-person-fill"></i></a></li>
                     <li><a href="cart.html"><i class="bi bi-bag"></i></a></li>
                 </ul>
+                <!-- ⭐⭐ כפתורי אדמין — מוסתרים מראש ⭐⭐ -->
+        <button id="add-product-btn" class="admin-btn" style="display:none;">Add Product</button>
+        <button id="manage-stock-btn" class="admin-btn" style="display:none;">Manage Stock</button>
+        <button id="delete-product-btn" class="admin-btn" style="display:none;">Delete Product</button>
             </div>
         </section>
 
@@ -62,6 +66,20 @@
     </div>
    <button class="btn btn-primary btn-purchase" type="button">PURCHASE</button>
 </section>
+
+<!-- ⭐⭐⭐ טופס הוספת מוצר – לאדמין בלבד ⭐⭐⭐ -->
+<form id="add-product-form" style="display:none; margin:20px;">
+    <h3>Add New Product</h3>
+
+    <input id="p-title" type="text" placeholder="Title"><br><br>
+    <input id="p-price" type="number" placeholder="Price"><br><br>
+    <input id="p-image" type="text" placeholder="Image URL"><br><br>
+    <input id="p-stock" type="number" placeholder="Stock"><br><br>
+    <textarea id="p-desc" placeholder="Description"></textarea><br><br>
+
+    <button type="submit">Save Product</button>
+</form>
+<!-- ⭐⭐⭐ סוף טופס ⭐⭐⭐ -->
 
 
     <!-- newsletter in the home page-->

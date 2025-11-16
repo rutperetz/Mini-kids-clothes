@@ -526,3 +526,44 @@ left: 20px;
     display: flex;
     justify-content: center;
 }
+
+.admin-btn {
+  background-color: #7d5f4c;
+  border: none;
+  padding: 8px 14px;
+  margin-left: 10px;
+  border-radius: 6px;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.admin-btn:hover {
+  background-color: #c3987e;
+}
+
+
+.admin-actions {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 10px;
+}
+
+.admin-delete-btn,
+.admin-edit-btn {
+    background-color: #c3987e;
+    color: white;
+    border: none;
+    padding: 6px 12px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+.admin-delete-btn:hover {
+    background-color: #a86b5c;
+}
+
+.admin-edit-btn:hover {
+    background-color: #7d5f4c;
+}

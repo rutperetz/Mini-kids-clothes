@@ -78,9 +78,25 @@ async function loadProductsFromServer() {
             shopItemsContainer.appendChild(itemDiv);
         });
 
+        const user = getUserFromToken();
+
+
+
     } catch (err) {
         console.error("שגיאה בטעינת מוצרים מהשרת:", err);
     }
+
+}
+
+
+
+function getUserFromToken() {
+    const token = localStorage.getItem("token");
+    if (!token) return null;
+
+    const payload = token.split(".")[1]; 
+    const decoded = JSON.parse(atob(payload));  
+    return decoded; 
 }
 
 
