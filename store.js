@@ -244,7 +244,7 @@ function printWelcomeMessage() {
         document.getElementById("welcomeMessage").innerText = "welcome " + storedItems + "!";
     } else {
         // אם אין ערך שמור, הדפס הודעת שגיאה
-        document.getElementById("welcomeMessage").innerText ="ERROR";
+        document.getElementById("welcomeMessage").innerText ="Hello, guest!";
     }
 }
 
