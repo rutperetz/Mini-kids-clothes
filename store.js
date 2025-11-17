@@ -7,6 +7,8 @@ if (document.readyState == 'loading') {
 async function ready() 
 {
 
+    updateWelcomeMessage();  // ← כאן!
+
     var cartItems = document.getElementsByClassName('cart-items')[0];
     var storedCart = localStorage.getItem("cart")
     if (storedCart !=null)
@@ -217,37 +219,48 @@ function goShopPage(){
 }
 
 
-var storedItem = localStorage.getItem("storedItem"); /*defines a localSotrage named storedItem*/
+/*var storedItem = localStorage.getItem("storedItem"); /*defines a localSotrage named storedItem
 
 function save(){
 
     //event.preventDefault(); // מניעת העדכון האוטומטי של הטופס
     var Item = document.getElementById("Username").value; /*מושך את השם משתמש בהלוג*/
-    localStorage.setItem("storedItem", Item); /*מאחסן את השם המשוך במאגר הלוקלי שקראנו לו בשם סטוראיטם*/
+   // localStorage.setItem("storedItem", Item); /*מאחסן את השם המשוך במאגר הלוקלי שקראנו לו בשם סטוראיטם
 
-    if (Item != "" )
-    {
-        document.getElementById("Username").value = ""; // temp patch
+   // if (Item != "" )
+    //{
+    //    document.getElementById("Username").value = ""; // temp patch
 
-        window.location.href = "store.html"; // מעבר לדף home.html
+     //   window.location.href = "store.html"; // מעבר לדף home.html
         //window.URL = "store.html";
-    }
-}
+   // }
+//}
 
-function printWelcomeMessage() {
+//function printWelcomeMessage() {
 
-    const storedItems = localStorage.getItem("storedItem"); // משיכת הערך מהמאגר הנתונים הלוקלי
+   // const storedItems = localStorage.getItem("storedItem"); // משיכת הערך מהמאגר הנתונים הלוקלי
 
     // אם קיים ערך שמור
-    if (storedItems) {
+    //if (storedItems) {
         // הדפסת הערך עם המילה "ברוך הבא"
-        document.getElementById("welcomeMessage").innerText = "welcome " + storedItems + "!";
-    } else {
+     //   document.getElementById("welcomeMessage").innerText = "welcome " + storedItems + "!";
+    //} else {
         // אם אין ערך שמור, הדפס הודעת שגיאה
-        document.getElementById("welcomeMessage").innerText ="Hello, guest!";
-    }
-}
+    //    document.getElementById("welcomeMessage").innerText ="Hello, guest!";
+   // }
+//}
 
+function updateWelcomeMessage() {
+    const user = getUserFromToken();
+
+    if (!user) {
+        document.getElementById("welcomeMessage").innerText = "Hello, guest!";
+        return;
+    }
+
+    // חשוב — השם האמיתי מגיע מהשרת והוא שמור ב-token
+    document.getElementById("welcomeMessage").innerText = "Hello, " + user.name + "!";
+}
 
 
 
