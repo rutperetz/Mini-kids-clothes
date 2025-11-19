@@ -55,7 +55,7 @@ router.post(
 
       // יצירת טוקן JWT
       const token = jwt.sign(
-        { id: user._id, email: user.email, role: user.role },
+        { id: user._id, email: user.email, role: user.role ,name: user.name },
         process.env.JWT_SECRET,
         { expiresIn: process.env.JWT_EXPIRES_IN || '1d' }
       );
@@ -112,7 +112,7 @@ router.post(
 
       // יצירת טוקן חדש
       const token = jwt.sign(
-        { id: user._id, email: user.email, role: user.role },
+        { id: user._id, email: user.email, role: user.role ,name: user.name },
         process.env.JWT_SECRET,
         { expiresIn: process.env.JWT_EXPIRES_IN || '1d' }
       );
