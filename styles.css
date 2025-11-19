@@ -526,7 +526,7 @@ left: 20px;
     display: flex;
     justify-content: center;
 }
-
+/*
 .admin-btn {
   background-color: #7d5f4c;
   border: none;
@@ -548,7 +548,7 @@ left: 20px;
     gap: 10px;
     margin-top: 10px;
 }
-
+*/
 .admin-delete-btn,
 .admin-edit-btn {
     background-color: #c3987e;
@@ -566,4 +566,22 @@ left: 20px;
 
 .admin-edit-btn:hover {
     background-color: #7d5f4c;
+}
+
+#add-product-btn {
+    background-color: #8B6E5E;
+    color: white;
+    border: none;
+    padding: 10px 18px;
+    border-radius: 25px;
+    font-size: 15px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: 0.3s ease;
+}
+
+#add-product-btn:hover {
+    background-color: #6d564a;
+    transform: translateY(-2px);
+    box-shadow: 0px 4px 10px rgba(0,0,0,0.15);
 }

@@ -12,7 +12,11 @@ import usersRouter from "./routes/users.routes.js";
 const app = express();
 
 // לאפשר ללקוח לקרוא לשרת
-app.use(cors());
+//app.use(cors());
+app.use(cors({
+    origin: "*"
+}));
+
 // לפענח JSON שמגיע ב-POST/PUT
 app.use(express.json());
 // לוגים נוחים לפיתוח
