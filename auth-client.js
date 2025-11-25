@@ -10,13 +10,13 @@ function getCurrentUser() {
     }
 }
 
-// פונקציה שבודקת אם המשתמש הוא אדמין
+//Check if the user is an admin
 function isAdmin() {
     const user = getCurrentUser();
     return user && user.role === "admin";
 }
 
-// פונקציה שמעדכנת את התפריט העליון (navbar)
+//Updates the top menu
 function updateNavbar() {
     const user = getCurrentUser();
     const logInLi = document.getElementById("logIn"); // כבר קיים אצלך ב-HTML
@@ -24,10 +24,9 @@ function updateNavbar() {
     if (!logInLi) return;
 
     if (!user) {
-        // אם אין משתמש מחובר – נציג קישור ל-Login
         logInLi.innerHTML = `<a href="logIn.html"><i class="bi bi-person-fill"></i></a>`;
     } else {
-        // אם יש משתמש מחובר – נציג את שמו וכפתור Logout
+        // Logged in user – we will display their name and a Logout button
         logInLi.innerHTML = `
             <span style="color:white; margin-right:8px;">
                 Hello, ${user.name}
@@ -44,11 +43,10 @@ function updateNavbar() {
                 localStorage.removeItem("token");
                 localStorage.removeItem("user");
                 alert("Logged out");
-                window.location.href = "store.html"; // חזרה לדף הבית
+                window.location.href = "store.html"; 
             });
         }
     }
 }
 
-// נפעיל את זה כשעמוד נטען
 document.addEventListener("DOMContentLoaded", updateNavbar);

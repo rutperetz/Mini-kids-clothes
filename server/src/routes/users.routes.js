@@ -4,18 +4,17 @@ import { User } from "../models/User.js";
 const router = Router();
 
 /**
- * הופך משתמש ל-admin לפי אימייל
- * PATCH /api/users/make-admin
+Making a user an admin
  */
 router.patch("/make-admin", async (req, res) => {
   try {
     const { email } = req.body;
 
     if (!email) {
-      return res.status(400).json({ error: "חסר אימייל בבקשה" });
+    return res.status(400).json({ error: "Missing email please" });
     }
 
-    // מחפשים את המשתמש ומעדכנים role ל-admin
+    // Search for the user and update role to admin
     const updatedUser = await User.findOneAndUpdate(
       { email },
       { role: "admin" },
@@ -23,11 +22,11 @@ router.patch("/make-admin", async (req, res) => {
     );
 
     if (!updatedUser) {
-      return res.status(404).json({ error: "משתמש לא נמצא" });
+      return res.status(404).json({ error: "User not found" });
     }
 
     res.json({
-      msg: "המשתמש הפך לאדמין בהצלחה",
+      msg: "User successfully became admin",
       user: {
         email: updatedUser.email,
         role: updatedUser.role
@@ -36,7 +35,7 @@ router.patch("/make-admin", async (req, res) => {
 
   } catch (err) {
     console.error("Make-admin error:", err);
-    res.status(500).json({ error: "שגיאה בשרת" });
+    res.status(500).json({ error: "Server error" });
   }
 });
 

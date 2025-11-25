@@ -1,43 +1,35 @@
 import jwt from 'jsonwebtoken';
 
-/**
- * בודק שיש טוקן תקף ב-Header:
- * Authorization: Bearer <token>
- */
+/*Responsible for the entire authorization system*/
+
+//Checks if the user is logged in 
 export function authRequired(req, res, next) {
   try {
     const header = req.headers.authorization || '';
 
-    // מצפה לפורמט: "Bearer asdasdasdasd..."
     const token = header.startsWith('Bearer ') ? header.slice(7) : null;
 
     if (!token) {
       return res.status(401).json({ error: 'אין הרשאה (חסר טוקן)' });
     }
-
-    // מאמתים את הטוקן ומקבלים את המידע שבתוכו
+    
+    // Validate the token and get the information inside it
     const payload = jwt.verify(token, process.env.JWT_SECRET);
-    // נשמור את המידע הזה בבקשה כדי שנוכל להשתמש בו בהמשך (req.user)
-    req.user = payload; // { id, email, role, iat, exp }
+    req.user = payload; 
 
-    next(); // ממשיכים לראוט הבא
+    next(); 
   } catch (err) {
     console.error('JWT error:', err.message);
-    return res.status(401).json({ error: 'טוקן לא תקף או שפג תוקפו' });
-  }
+    return res.status(401).json({ error: 'Token is invalid or expired' });  }
 }
 
-/**
- * בודק שלמשתמש יש תפקיד מסוים (למשל 'admin')
- */
+/* Checks that a user has a specific role admin/use */
 export function requireRole(role) {
   return (req, res, next) => {
     if (!req.user) {
-      return res.status(401).json({ error: 'אין משתמש מחובר' });
-    }
+      return res.status(401).json({ error: 'No user logged in' });    }
     if (req.user.role !== role) {
-      return res.status(403).json({ error: 'אין לך הרשאה לבצע פעולה זו' });
-    }
+      return res.status(403).json({ error: 'You do not have permission to perform this action' });    }
     next();
   };
 }

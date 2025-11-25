@@ -11,23 +11,22 @@ import usersRouter from "./routes/users.routes.js";
 
 const app = express();
 
-// לאפשר ללקוח לקרוא לשרת
-//app.use(cors());
+
 app.use(cors({
     origin: "*"
 }));
 
-// לפענח JSON שמגיע ב-POST/PUT
+
 app.use(express.json());
-// לוגים נוחים לפיתוח
+
 app.use(morgan('dev'));
 
-// בדיקת חיים בסיסית (לבדיקת שהשרת עובד)
 app.get('/api/health', (req, res) => {
   res.json({ ok: true, msg: 'server is up' });
 });
 
-app.use('/api/products', productsRouter);//“תן לקובץ products.routes.js לטפל בכל בקשה שמתחילה ב־/api/products.”
+//Connecting all routers to the system
+app.use('/api/products', productsRouter);
 app.use('/api/auth', authRouter);
 app.use('/api/orders', ordersRouter);
 app.use("/api/users", usersRouter);
@@ -36,7 +35,6 @@ app.use("/api/users", usersRouter);
 
 export default app;
 
-// נתיב בדיקה: מצב החיבור למסד
 app.get('/api/db-status', (req, res) => {
   // 0=disconnected, 1=connected, 2=connecting, 3=disconnecting
   const state = mongoose.connection.readyState;

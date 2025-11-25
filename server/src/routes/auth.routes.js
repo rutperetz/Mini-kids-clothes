@@ -2,32 +2,32 @@ import { Router } from 'express';
 import { body, validationResult } from 'express-validator';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
-import { User } from '../models/User.js';
+import { User } from '../models/User.js'; //User model
 
 const router = Router();
 
 /**
- * הרשמה
- * POST /api/auth/register
- * body: { name, email, password }
+ The login and registration system's routing file.
  */
+
+// Register a new user
 router.post(
   '/register',
-  [
+  [// Validation rules
     body('name')
       .isString()
       .isLength({ min: 2 })
-      .withMessage('השם חייב להיות לפחות 2 תווים'),
+      .withMessage('Name must be at least 2 characters'),
     body('email')
       .isEmail()
-      .withMessage('אימייל לא תקין'),
+      .withMessage('Invalid email address'),
     body('password')
       .isLength({ min: 6 })
-      .withMessage('סיסמה חייבת להיות לפחות 6 תווים'),
+      .withMessage('Password must be at least 6 characters'),
   ],
   async (req, res) => {
     try {
-      // בדיקת ולידציות
+      // Check validations
       const errors = validationResult(req);
       if (!errors.isEmpty()) {
         return res.status(400).json({ errors: errors.array() });
@@ -35,32 +35,31 @@ router.post(
 
       const { name, email, password } = req.body;
 
-      // לבדוק אם המייל כבר רשום
+      // Check if email is already registered
       const existing = await User.findOne({ email });
       if (existing) {
-        return res.status(409).json({ error: 'האימייל הזה כבר רשום במערכת' });
-      }
+      return res.status(409).json({ error: 'This email is already registered in the system' });      }
 
-      // הצפנת סיסמה
+      // Encrypt the password
       const salt = await bcrypt.genSalt(10);
       const passwordHash = await bcrypt.hash(password, salt);
 
-      // יצירת משתמש חדש
+      // Create the user in the database
       const user = await User.create({
         name,
         email,
         passwordHash,
-        role: 'user', // בעתיד נוכל לשנות ל-admin דרך Compass
+        role: 'user', //Creator acting as a regular user
       });
 
-      // יצירת טוקן JWT
+      // Create a JWT token for the new user
       const token = jwt.sign(
         { id: user._id, email: user.email, role: user.role ,name: user.name },
         process.env.JWT_SECRET,
         { expiresIn: process.env.JWT_EXPIRES_IN || '1d' }
       );
 
-      // החזרת פרטי משתמש בלי הסיסמה
+      // Return the user data and token without a password
       res.status(201).json({
         user: {
           id: user._id,
@@ -72,45 +71,40 @@ router.post(
       });
     } catch (err) {
       console.error(err);
-      res.status(500).json({ error: 'שגיאה בשרת בזמן הרשמה' });
+      res.status(500).json({ error: 'Server error during registration ' });
     }
   }
 );
 
-/**
- * התחברות
- * POST /api/auth/login
- * body: { email, password }
- */
+
+// User login
+ 
 router.post(
   '/login',
   [
-    body('email').isEmail().withMessage('אימייל לא תקין'),
-    body('password').isLength({ min: 6 }).withMessage('חובה סיסמה'),
+    body('email').isEmail().withMessage('Invalid email address'),
+    body('password').isLength({ min: 6 }).withMessage('Password required'),
   ],
   async (req, res) => {
     try {
-      // בדיקת ולידציות
+      // Check validations
       const errors = validationResult(req);
       if (!errors.isEmpty()) {
         return res.status(400).json({ errors: errors.array() });
       }
 
       const { email, password } = req.body;
-
-      // חיפוש משתמש לפי אימייל
+      // Find user by email
       const user = await User.findOne({ email });
       if (!user) {
-        return res.status(401).json({ error: 'אימייל או סיסמה שגויים' });
-      }
+      return res.status(401).json({ error: 'Incorrect email or password' });      }
 
-      // בדיקת סיסמה
+      // Check password
       const passwordOk = await bcrypt.compare(password, user.passwordHash);
       if (!passwordOk) {
-        return res.status(401).json({ error: 'אימייל או סיסמה שגויים' });
-      }
+      return res.status(401).json({ error: 'Incorrect email or password' });      }
 
-      // יצירת טוקן חדש
+      // Create JWT token
       const token = jwt.sign(
         { id: user._id, email: user.email, role: user.role ,name: user.name },
         process.env.JWT_SECRET,
@@ -128,8 +122,7 @@ router.post(
       });
     } catch (err) {
       console.error(err);
-      res.status(500).json({ error: 'שגיאה בשרת בזמן התחברות' });
-    }
+      res.status(500).json({ error: 'Server error while connecting' });    }
   }
 );
 
