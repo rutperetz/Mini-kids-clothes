@@ -1,5 +1,6 @@
 import mongoose from 'mongoose';
 
+//System user structure
 const UserSchema = new mongoose.Schema(
   {
     name: {
@@ -10,22 +11,22 @@ const UserSchema = new mongoose.Schema(
     email: {
       type: String,
       required: true,
-      unique: true,    // שלא יהיו שני משתמשים עם אותו מייל
+      unique: true,    //No 2 users have the same email
       lowercase: true,
       trim: true,
       index: true,
     },
     passwordHash: {
       type: String,
-      required: true,  // נשמור רק את הסיסמה המוצפנת, לא את הסיסמה עצמה
+      required: true,  //Saves encrypted password
     },
     role: {
       type: String,
       enum: ['user', 'admin'],
-      default: 'user', // כרגע כולם "user", אחר כך נעשה גם admin
+      default: 'user', //User type - ADMIN definition will be done manually
     },
   },
-  { timestamps: true } // יוסיף createdAt / updatedAt
+  { timestamps: true } 
 );
 
 export const User = mongoose.model('User', UserSchema);

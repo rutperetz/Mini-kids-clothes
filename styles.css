@@ -160,12 +160,7 @@ left: 20px;
     padding: 14px 80px 14px 65px;
 }
 
-/*#product1 .shop-item-details{ /*rearrange the utems from one column to flexible rows
-    display: flex;
-    justify-content: space-between;
-    padding-top: 20px;
-    flex-wrap: wrap;
-}*/
+
 #product1 .shop-item{/* range the product in a rectangle pattern*/
     width: 23%;
     min-width: 250px;
@@ -179,9 +174,7 @@ left: 20px;
     position: relative;
 
 }
-/*#product1.shop-item{
-    box-shadow: 20px 20px 30px rgba(0, 0, 0, 0.06);
-}*/
+
 .shop-item img{/* size of the products pictures*/
     width: 100%;
     border-radius: 20px;
@@ -211,12 +204,6 @@ left: 20px;
 }
 
 
-/*#product1 .shop-item-details{/* put the words that under the picture in the left size
-    text-align: start;
-    padding: 10px 0;
-    
-
-}*/
 
 #product1 .shop-items { /*put the products in the rows*/
     display: flex;
@@ -531,8 +518,6 @@ left: 20px;
 }
 
 /********Admin Buttons and Modal Form********/
-
-/* כל כפתורי האדמין למעלה */
 .top-admin-btn {
     background-color: #f2e9e4;
     color: #5c4d45;
@@ -551,12 +536,24 @@ left: 20px;
     transform: translateY(-1px);
 }
 
+.admin-actions {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    gap: 12px;
+    margin-top: 10px;
+}
+
+.add-product-container {
+    display: flex;
+    justify-content: flex-end; 
+    padding-right: 10px; 
+}
 
 
 
 
-/* עיצוב המודל (הטופס הקופץ) */
-/* רקע שקוף מאחורה */
+/* Design the model (pop-up form) */
 .modal-overlay {
     position: fixed;
     top: 0;
@@ -564,13 +561,12 @@ left: 20px;
     width: 100%;
     height: 100%;
     background: rgba(0,0,0,0.4);
-    display: none; /* מוסתר עד שלוחצים */
+    display: none; 
     justify-content: center;
     align-items: center;
     z-index: 2000;
 }
 
-/* הקופסה עצמה */
 .modal-box {
     background: #f9f4f1;
     padding: 25px;
@@ -580,7 +576,7 @@ left: 20px;
     animation: fadeIn 0.3s ease;
 }
 
-/* כותרת */
+
 .modal-box h2 {
     margin-bottom: 20px;
     color: #5c4d45;
@@ -588,7 +584,6 @@ left: 20px;
     text-align: center;
 }
 
-/* שדות */
 .modal-box input,
 .modal-box textarea {
     width: 100%;
@@ -599,7 +594,6 @@ left: 20px;
     background: #ffffff;
 }
 
-/* כפתור שמירה */
 .save-btn {
     width: 100%;
     background: #8B6E5E;
@@ -616,7 +610,6 @@ left: 20px;
     background: #6d564a;
 }
 
-/* כפתור ביטול */
 .close-btn {
     width: 100%;
     background: #ded1c8;
@@ -632,33 +625,8 @@ left: 20px;
     background: #c9bbb2;
 }
 
-/* אנימציה */
 @keyframes fadeIn {
     from { transform: scale(0.9); opacity: 0; }
     to   { transform: scale(1); opacity: 1; }
-}
-
-
-/* כפתורי אדמין בכל מוצר */
-.admin-actions {
-    display: flex;
-    justify-content: space-between;
-    margin-top: 12px;
-}
-
-.admin-actions button {
-    flex: 1;
-    margin: 0 5px;
-    padding: 8px;
-    background-color: #f2e9e4;
-    border: 1px solid #d8cfc9;
-    color: #5c4d45;
-    border-radius: 12px;
-    cursor: pointer;
-    transition: 0.2s ease;
-}
-
-.admin-actions button:hover {
-    background-color: #e9dfda;
 }
 
