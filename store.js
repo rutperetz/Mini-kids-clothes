@@ -7,7 +7,7 @@ if (document.readyState == 'loading') {
 async function ready() 
 {
 
-    updateWelcomeMessage();  // ← כאן!
+    updateWelcomeMessage();  
 
     var cartItems = document.getElementsByClassName('cart-items')[0];
     var storedCart = localStorage.getItem("cart")
