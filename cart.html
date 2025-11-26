@@ -89,10 +89,15 @@ async function loadCart() {
         </button>
     </div>
 `;
-
-
-        container.appendChild(div);
+    container.appendChild(div);
     });
+    // Calculate total
+let total = 0;
+data.cart.forEach(item => {
+    total += item.productId.price * item.quantity;
+});
+document.querySelector(".cart-total-price").innerText = "$" + total;
+
 }
 
 document.addEventListener("DOMContentLoaded", loadCart);
@@ -115,6 +120,8 @@ document.getElementById("closeOrdersModal").addEventListener("click", () => {
     document.getElementById("ordersModal").style.display = "none";
 });
 
+
+// Load and display previous orders
 async function loadOrders() {
     const token = localStorage.getItem("token");
     const payload = JSON.parse(atob(token.split(".")[1]));
@@ -160,6 +167,29 @@ async function loadOrders() {
     document.getElementById("ordersModal").style.display = "flex";
 }
 </script>
+
+
+<!-- PURCHASE BUTTON SCRIPT -->
+<script>
+document.querySelector(".btn-purchase").addEventListener("click", async () => {
+    const token = localStorage.getItem("token");
+    const payload = JSON.parse(atob(token.split(".")[1]));
+    const userId = payload.id;
+
+    const res = await fetch("http://localhost:3000/api/orders/create", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ userId })
+    });
+
+    alert("Thank you for your purchase!");
+    loadCart(); 
+});
+</script>
+
+
+
+<!-- REMOVE ITEM FROM CART SCRIPT -->
 <script>
 document.addEventListener("click", async (e) => {
     if (e.target.classList.contains("remove-item-btn")) {
@@ -176,8 +206,7 @@ document.addEventListener("click", async (e) => {
             body: JSON.stringify({ userId, productId })
         });
 
-        alert("המוצר הוסר מהעגלה");
-        loadCart(); // טען מחדש את העגלה
+        alert("Product removed from cart");         loadCart(); 
     }
 });
 </script>

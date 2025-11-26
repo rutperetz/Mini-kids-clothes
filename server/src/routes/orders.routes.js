@@ -4,8 +4,7 @@ import { User } from "../models/User.js";
 
 const router = express.Router();
 
-
-// יצירת הזמנה אחרי רכישה
+// Create a new order
 router.post("/create", async (req, res) => {
   try {
     const { userId } = req.body;
@@ -13,7 +12,6 @@ router.post("/create", async (req, res) => {
     const user = await User.findById(userId).populate("cart.productId");
     if (!user) return res.status(404).json({ error: "User not found" });
 
-    // יצירת אובייקט הזמנה
     const orderItems = user.cart.map(item => ({
       productId: item.productId._id,
       quantity: item.quantity,
@@ -28,7 +26,7 @@ router.post("/create", async (req, res) => {
       totalPrice: total
     });
 
-    // ריקון עגלה לאחר רכישה
+    // Empty cart after purchase
     user.cart = [];
     await user.save();
 
@@ -39,8 +37,7 @@ router.post("/create", async (req, res) => {
   }
 });
 
-
-// שליפת כל ההזמנות של משתמש
+// Get all orders from a specific user
 router.get("/:userId", async (req, res) => {
   try {
     const orders = await Order.find({ userId: req.params.userId })

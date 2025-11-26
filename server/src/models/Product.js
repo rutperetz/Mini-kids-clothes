@@ -6,7 +6,6 @@ const ProductSchema = new mongoose.Schema({
   description: { type: String, default: '' },     
   price: { type: Number, required: true },        
   imageUrl: { type: String, default: '' },        
-  //category: { type: String, default: 'general' },  // קטגוריה (למשל בגדים/נעליים)
   stock: { type: Number, default: 0 },            
 }, { timestamps: true });                        
 

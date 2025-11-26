@@ -1,4 +1,3 @@
-// פונקציה שמחזירה את המשתמש הנוכחי מתוך localStorage
 function getCurrentUser() {
     const userJson = localStorage.getItem("user");
     if (!userJson) return null;
