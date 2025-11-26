@@ -34,6 +34,9 @@ function renderProducts(products) {
         const itemDiv = document.createElement("div");
         itemDiv.classList.add("shop-item");
 
+        itemDiv.setAttribute("data-id", product._id);
+
+
         itemDiv.innerHTML = `
             <img class="shop-item-image" src="${product.imageUrl}">
             <span class="shop-item-title">${product.title}</span>
@@ -231,4 +234,27 @@ document.addEventListener("DOMContentLoaded", () => {
             loadProducts();
         });
     }
+});
+
+
+// Adding item to cart - clicking the Add to Cart button
+document.addEventListener("click", async (e) => {
+    if (!e.target.classList.contains("shop-item-button")) return;
+
+    const item = e.target.closest(".shop-item");
+    const productId = item.getAttribute("data-id");
+
+    const token = localStorage.getItem("token");
+    const payload = JSON.parse(atob(token.split(".")[1]));
+    const userId = payload.id;
+
+    const res = await fetch("http://localhost:3000/api/cart/add", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ userId, productId })
+    });
+
+    const data = await res.json();
+    console.log("Cart updated:", data);
+    alert("Product added to cart!");
 });

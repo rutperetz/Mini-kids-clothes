@@ -103,20 +103,25 @@ function getUserFromToken() {
 
 
 
+    // //ביצוע רכישה
+async function purchaseClicked() {
+    if (!confirm("Continue to purchase?")) return;
 
-function purchaseClicked() {
-    var ok =confirm("Continue to purchase?");
-    if(ok)
-    {
-    var credit =prompt("ENTER CREDIT:");
-    alert('Thank you for your purchase')/*הודעת רכישה בהצלחה */
-    var cartItems = document.getElementsByClassName('cart-items')[0]
-    while (cartItems.hasChildNodes()) {/*מסיר פריטים מהעגלה לאחר הרכישה */
-        cartItems.removeChild(cartItems.firstChild)
-    }
-    updateCartTotal()/*יעדכן את הסכום הכולל בהתאם */
+    const token = localStorage.getItem("token");
+    const payload = JSON.parse(atob(token.split(".")[1]));
+    const userId = payload.id;
+
+    // שליחת הזמנה לשרת
+    await fetch("http://localhost:3000/api/orders/create", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ userId })
+    });
+
+    alert("Thank you for your purchase!");
+    location.reload();
 }
-}
+
 
 function removeCartItem(event) {
     var buttonClicked = event.target

@@ -630,3 +630,20 @@ left: 20px;
     to   { transform: scale(1); opacity: 1; }
 }
 
+
+/* Design the remove item button in the cart page */
+.remove-item-btn {
+    background-color: #d4a59a;
+    color: white;
+    border: none;
+    padding: 6px 12px;
+    font-size: 14px;
+    margin-left: 10px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: 0.2s ease;
+}
+
+.remove-item-btn:hover {
+    background-color: #bb8f84;
+}
