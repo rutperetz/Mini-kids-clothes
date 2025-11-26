@@ -4,9 +4,8 @@ import morgan from 'morgan';
 import mongoose from 'mongoose';
 import productsRouter from './routes/products.routes.js';//חיבור נתיב ראשי לשרת
 import authRouter from './routes/auth.routes.js';
-import ordersRouter from './routes/orders.routes.js';
 import usersRouter from "./routes/users.routes.js";
-
+import cartRouter from "./routes/cart.routes.js";
 
 
 const app = express();
@@ -28,9 +27,8 @@ app.get('/api/health', (req, res) => {
 //Connecting all routers to the system
 app.use('/api/products', productsRouter);
 app.use('/api/auth', authRouter);
-app.use('/api/orders', ordersRouter);
 app.use("/api/users", usersRouter);
-
+app.use("/api/cart", cartRouter);
 
 
 export default app;

@@ -25,6 +25,12 @@ const UserSchema = new mongoose.Schema(
       enum: ['user', 'admin'],
       default: 'user', //User type - ADMIN definition will be done manually
     },
+    cart: [
+  {
+    productId: { type: mongoose.Schema.Types.ObjectId, ref: "Product" },
+    quantity: { type: Number, default: 1 }
+  }
+],
   },
   { timestamps: true } 
 );
