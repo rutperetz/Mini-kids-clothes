@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <title>System Statistics</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            direction: ltr;
+            padding: 30px;
+            background: #f4f4f4;
+        }
+
+        h1 {
+            color: #333;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        .box {
+            background: white;
+            padding: 20px;
+            border-radius: 12px;
+            margin-bottom: 35px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        h2 {
+            margin-bottom: 15px;
+            color: #444;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+        }
+
+        th,
+        td {
+            padding: 12px;
+            border: 1px solid #ddd;
+            text-align: center;
+        }
+
+        th {
+            background: #333;
+            color: white;
+        }
+
+        td {
+            background: #fafafa;
+        }
+    </style>
+</head>
+
+<body>
+
+    <h1>📊 System Statistics</h1>
+
+    <!-- PRODUCTS SUMMARY -->
+    <div class="box">
+        <h2>Products Summary</h2>
+        <table id="products-table">
+            <thead>
+                <tr>
+                    <th>Total Products</th>
+                    <th>Total Stock</th>
+                    <th>Average Price</th>
+                    <th>Minimum Price</th>
+                    <th>Maximum Price</th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+    </div>
+
+    <!-- USERS BY MONTH -->
+    <div class="box">
+        <h2>Users Registered by Month</h2>
+        <table id="users-table">
+            <thead>
+                <tr>
+                    <th>Year</th>
+                    <th>Month</th>
+                    <th>Users Count</th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+    </div>
+
+    <script>
+        async function loadStats() {
+            try {
+                // PRODUCTS SUMMARY
+                const prodRes = await fetch("http://localhost:3000/api/stats/products-summary");
+                const prodData = await prodRes.json();
+
+                const prodTableBody = document.querySelector("#products-table tbody");
+                prodTableBody.innerHTML = `
+                    <tr>
+                        <td>${prodData.totalProducts}</td>
+                        <td>${prodData.totalStock}</td>
+                        <td>$${prodData.avgPrice.toFixed(2)}</td>
+                        <td>$${prodData.minPrice}</td>
+                        <td>$${prodData.maxPrice}</td>
+                    </tr>
+                `;
+
+                // USERS REGISTERED BY MONTH
+                const usersRes = await fetch("http://localhost:3000/api/stats/users-by-month");
+                const usersData = await usersRes.json();
+
+                const usersTableBody = document.querySelector("#users-table tbody");
+                usersTableBody.innerHTML = usersData
+                    .map(u => `
+                        <tr>
+                            <td>${u._id.year}</td>
+                            <td>${u._id.month}</td>
+                            <td>${u.count}</td>
+                        </tr>
+                    `)
+                    .join("");
+            } catch (err) {
+                console.error("Error loading stats", err);
+            }
+        }
+
+        loadStats();
+    </script>
+
+</body>
+
+</html>

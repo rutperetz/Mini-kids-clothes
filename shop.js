@@ -1,22 +1,25 @@
-// Loads products from the server
+// ==============================
+// Load products from the server
+// ==============================
 async function loadProducts() {
     try {
         const res = await fetch("http://localhost:3000/api/products");
-        const products = await res.json();
 
         if (!res.ok) {
             alert("Failed to load products");
             return;
         }
 
+        const products = await res.json();
         renderProducts(products);
-
     } catch (err) {
         console.error("Error loading products:", err);
     }
 }
 
-// Displays the products on the page
+// ==================================
+// Render products on the page
+// ==================================
 function renderProducts(products) {
     const container = document.getElementById("shop-items");
     container.innerHTML = "";
@@ -24,18 +27,16 @@ function renderProducts(products) {
     const token = localStorage.getItem("token");
     let role = null;
 
-    // שליפת role מתוך הטוקן
+    // שליפת role מתוך הטוקן (JWT)
     if (token) {
         const payload = JSON.parse(atob(token.split(".")[1]));
         role = payload.role;
     }
 
-    products.forEach(product => {
+    products.forEach((product) => {
         const itemDiv = document.createElement("div");
         itemDiv.classList.add("shop-item");
-
         itemDiv.setAttribute("data-id", product._id);
-
 
         itemDiv.innerHTML = `
             <img class="shop-item-image" src="${product.imageUrl}">
@@ -46,43 +47,57 @@ function renderProducts(products) {
                 <span class="shop-item-price">$${product.price}</span>
                 <button class="btn btn-primary shop-item-button">ADD TO CART</button>
             </div>
- 
-            
-            ${role === "admin" ? `
-            <div class="admin-actions">
-            <button class="top-admin-btn admin-edit-btn" data-id="${product._id}">Edit</button>
-            <button class="top-admin-btn admin-delete-btn" data-id="${product._id}">Delete</button>
-            </div>
-            ` : ""}
 
-            
+            ${
+                role === "admin"
+                    ? `
+            <div class="admin-actions">
+                <button class="top-admin-btn admin-edit-btn" data-id="${product._id}">Edit</button>
+                <button class="top-admin-btn admin-delete-btn" data-id="${product._id}">Delete</button>
+            </div>
+            `
+                    : ""
+            }
         `;
 
         container.appendChild(itemDiv);
     });
 
-    
     if (typeof ready === "function") ready();
 }
 
-// Loads products when the page loads
+// ==================================
+// On page load – load products
+// ==================================
 document.addEventListener("DOMContentLoaded", loadProducts);
 
-// Show admin buttons if the user is admin
-window.addEventListener("DOMContentLoaded", () => {
+// ==================================
+// Show admin buttons + Admin link
+// ==================================
+document.addEventListener("DOMContentLoaded", () => {
     const token = localStorage.getItem("token");
-    if (!token) return;
+    const adminLink = document.getElementById("adminLink");
+    const addBtn = document.getElementById("add-product-btn");
 
+    // אם אין טוקן – להסתיר אלמנטים של אדמין
+    if (!token) {
+        if (adminLink) adminLink.style.display = "none";
+        if (addBtn) addBtn.style.display = "none";
+        return;
+    }
+
+    // פענוח ה-JWT
     const payload = JSON.parse(atob(token.split(".")[1]));
 
     if (payload.role === "admin") {
-        document.getElementById("add-product-btn").style.display = "inline-block";
-      
+        if (adminLink) adminLink.style.display = "inline-block"; // קישור ל-stats.html
+        if (addBtn) addBtn.style.display = "inline-block";       // כפתור הוספת מוצר
     }
 });
 
-
-// Opening the model to add a product - clicking the Add Product button
+// ==================================
+// Open "Add Product" modal
+// ==================================
 document.addEventListener("DOMContentLoaded", () => {
     const addBtn = document.getElementById("add-product-btn");
     if (addBtn) {
@@ -92,22 +107,26 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 });
 
-
-// Closing the model for adding a product - clicking the Cancel button
+// ==================================
+// Close "Add Product" modal
+// ==================================
 document.addEventListener("DOMContentLoaded", () => {
     const closeBtn = document.getElementById("closeModal");
     const modal = document.getElementById("addProductModal");
 
-    if (closeBtn) {
+    if (closeBtn && modal) {
         closeBtn.addEventListener("click", () => {
             modal.style.display = "none";
         });
     }
 });
 
-//Submitting the form and adding the product
+// ==================================
+// Submit "Add Product" form
+// ==================================
 document.addEventListener("DOMContentLoaded", () => {
     const addForm = document.getElementById("add-product-form");
+
     if (addForm) {
         addForm.addEventListener("submit", async (e) => {
             e.preventDefault();
@@ -119,16 +138,16 @@ document.addEventListener("DOMContentLoaded", () => {
                 price: Number(document.getElementById("p-price").value),
                 imageUrl: document.getElementById("p-image").value,
                 stock: Number(document.getElementById("p-stock").value),
-                description: document.getElementById("p-desc").value
+                description: document.getElementById("p-desc").value,
             };
 
             const res = await fetch("http://localhost:3000/api/products", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
-                    "Authorization": "Bearer " + token
+                    Authorization: "Bearer " + token,
                 },
-                body: JSON.stringify(newProduct)
+                body: JSON.stringify(newProduct),
             });
 
             console.log("Server response:", res.status);
@@ -139,55 +158,58 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 });
 
-
-//Deleting a product - clicking the delete button
+// ==================================
+// Delete product
+// ==================================
 document.addEventListener("click", async (e) => {
-    if (e.target.classList.contains("admin-delete-btn")) {
-        const id = e.target.getAttribute("data-id");
-        const token = localStorage.getItem("token");
+    if (!e.target.classList.contains("admin-delete-btn")) return;
 
-        if (!confirm("Are you sure you want to delete this product?")) return;
+    const id = e.target.getAttribute("data-id");
+    const token = localStorage.getItem("token");
 
-        await fetch(`http://localhost:3000/api/products/${id}`, {
-            method: "DELETE",
-            headers: {
-                "Authorization": "Bearer " + token
-            }
-        });
+    if (!confirm("Are you sure you want to delete this product?")) return;
 
-        alert("Product deleted!");
-        loadProducts();
-    }
+    await fetch(`http://localhost:3000/api/products/${id}`, {
+        method: "DELETE",
+        headers: {
+            Authorization: "Bearer " + token,
+        },
+    });
+
+    alert("Product deleted!");
+    loadProducts();
 });
 
-
-// Open the model - update the data directly to the model instances
+// ==================================
+// Open "Edit Product" modal + fill data
+// ==================================
 document.addEventListener("click", async (e) => {
     const editBtn = e.target.closest(".admin-edit-btn");
     if (!editBtn) return;
 
     const id = editBtn.getAttribute("data-id");
 
-    // Fetch the product from the server
+    // Fetch product from server
     const res = await fetch(`http://localhost:3000/api/products/${id}`);
     const product = await res.json();
 
-    // Fill in the fields
+    // Fill modal fields
     document.getElementById("edit-title").value = product.title;
     document.getElementById("edit-price").value = product.price;
     document.getElementById("edit-image").value = product.imageUrl;
     document.getElementById("edit-stock").value = product.stock;
     document.getElementById("edit-desc").value = product.description;
 
-    // Save ID for the duration of the update
+    // Save ID on the form
     document.getElementById("edit-product-form").setAttribute("data-id", id);
 
-    // Open a model
+    // Open modal
     document.getElementById("editProductModal").style.display = "flex";
 });
 
-
-// Closing the model for updating a product - clicking the Cancel button
+// ==================================
+// Close "Edit Product" modal
+// ==================================
 document.addEventListener("DOMContentLoaded", () => {
     const closeEditBtn = document.getElementById("closeEditModal");
     if (closeEditBtn) {
@@ -197,8 +219,9 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 });
 
-
-// Submitting the form and updating the product
+// ==================================
+// Submit "Edit Product" form
+// ==================================
 document.addEventListener("DOMContentLoaded", () => {
     const editForm = document.getElementById("edit-product-form");
 
@@ -214,16 +237,16 @@ document.addEventListener("DOMContentLoaded", () => {
                 price: Number(document.getElementById("edit-price").value),
                 imageUrl: document.getElementById("edit-image").value,
                 stock: Number(document.getElementById("edit-stock").value),
-                description: document.getElementById("edit-desc").value
+                description: document.getElementById("edit-desc").value,
             };
 
             const res = await fetch(`http://localhost:3000/api/products/${id}`, {
                 method: "PUT",
                 headers: {
                     "Content-Type": "application/json",
-                    "Authorization": "Bearer " + token
+                    Authorization: "Bearer " + token,
                 },
-                body: JSON.stringify(updatedProduct)
+                body: JSON.stringify(updatedProduct),
             });
 
             console.log("UPDATE STATUS:", res.status);
@@ -236,8 +259,9 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 });
 
-
-// Adding item to cart - clicking the Add to Cart button
+// ==================================
+// Add item to cart
+// ==================================
 document.addEventListener("click", async (e) => {
     if (!e.target.classList.contains("shop-item-button")) return;
 
@@ -251,7 +275,7 @@ document.addEventListener("click", async (e) => {
     const res = await fetch("http://localhost:3000/api/cart/add", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ userId, productId })
+        body: JSON.stringify({ userId, productId }),
     });
 
     const data = await res.json();

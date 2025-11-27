@@ -6,7 +6,7 @@ import { User } from "../models/User.js";
 const router = express.Router();
 
 /**
- * 1) כמה משתמשים נרשמו בכל חודש (AGGREGATE על User)
+ * 1) כמה משתמשים נרשמו בכל חודש
  *    GET /api/stats/users-by-month
  */
 router.get("/users-by-month", async (req, res) => {
@@ -32,8 +32,7 @@ router.get("/users-by-month", async (req, res) => {
 });
 
 /**
- * 2) סיכום על כל המוצרים (AGGREGATE על Product)
- *    כמה מוצרים, כמה סטוק כולל, ממוצע/מינימום/מקסימום מחיר
+ * 2) סיכום על המוצרים
  *    GET /api/stats/products-summary
  */
 router.get("/products-summary", async (req, res) => {
@@ -51,27 +50,20 @@ router.get("/products-summary", async (req, res) => {
       },
     ]);
 
-    // נחזיר אובייקט אחד במקום מערך עם איבר יחיד
-    res.json(result[0] || {
-      totalProducts: 0,
-      totalStock: 0,
-      avgPrice: 0,
-      minPrice: 0,
-      maxPrice: 0,
-    });
+    res.json(
+      result[0] || {
+        totalProducts: 0,
+        totalStock: 0,
+        avgPrice: 0,
+        minPrice: 0,
+        maxPrice: 0,
+      }
+    );
   } catch (err) {
     console.error("Error in /api/stats/products-summary:", err);
     res.status(500).json({ error: "Server error" });
   }
 });
 
+// 👈 זה החלק החשוב בשביל השגיאה שלך
 export default router;
-// SORT users by registration date (newest first)
-router.get("/sort/registration", async (req, res) => {
-  try {
-    const result = await User.find().sort({ createdAt: -1 });
-    res.json(result);
-  } catch (err) {
-    res.status(500).json({ error: "Server error" });
-  }
-});

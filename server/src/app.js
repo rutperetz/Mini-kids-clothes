@@ -7,7 +7,8 @@ import authRouter from './routes/auth.routes.js';
 import usersRouter from "./routes/users.routes.js";
 import cartRouter from "./routes/cart.routes.js";
 import ordersRouter from "./routes/orders.routes.js";
-
+import statsRouter from "./routes/stats.routes.js";   // 👈 להוסיף שורה זו
+//                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 
 const app = express();
@@ -16,7 +17,6 @@ const app = express();
 app.use(cors({
     origin: "*"
 }));
-
 
 app.use(express.json());
 
@@ -32,6 +32,8 @@ app.use('/api/auth', authRouter);
 app.use("/api/users", usersRouter);
 app.use("/api/cart", cartRouter);
 app.use("/api/orders", ordersRouter);
+app.use("/api/stats", statsRouter);   // 👈 בדיוק כאן להוסיף
+//                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 export default app;
 
