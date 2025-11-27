@@ -28,140 +28,149 @@
 
 <body>
 
-<!-- HEADER -->
-<section id="header">
-    <a href="#"><img src="logo5.png" class="logo" alt="" style="width: 200px"></a>
+    <!-- HEADER -->
+    <section id="header">
+        <a href="#">
+            <img src="logo5.png" class="logo" alt="" style="width: 200px">
+        </a>
 
-    <div>
-        <ul id="navbar">
-            <li><a href="store.html">Home</a></li>
-            <li><a class="active" href="shop.html">Shop</a></li>
+        <div>
+            <ul id="navbar">
+                <li><a href="store.html">Home</a></li>
+                <li><a class="active" href="shop.html">Shop</a></li>
 
-            <!-- ❌ Admin Panel LINK removed (כדי שלא יהיה כפול) -->
-            
-            <!-- Icons -->
-            <li id="logIn"><a href="logIn.html"><i class="bi bi-person-fill"></i></a></li>
-            <li><a href="cart.html"><i class="bi bi-bag"></i></a></li>
-        </ul>
+                <!-- Admin link הוסר כדי שלא יהיה כפול -->
+                
+                <!-- Icons -->
+                <li id="logIn">
+                    <a href="logIn.html"><i class="bi bi-person-fill"></i></a>
+                </li>
+                <li>
+                    <a href="cart.html"><i class="bi bi-bag"></i></a>
+                </li>
+            </ul>
 
-        <!-- Admin buttons (top right) -->
-        <div class="add-product-container">
+            <!-- TOP BUTTONS -->
+            <div class="add-product-container">
 
-            <!-- NEW: button for stats page -->
-            <button id="admin-stats-btn" class="top-admin-btn" style="display:none;">
-                System Statistics
-            </button>
+                <!-- ⭐ Sort button – זמין לכל המשתמשים ⭐ -->
+                <button id="sort-price-asc" class="top-admin-btn">
+                    Sort by Price ↑
+                </button>
 
-            <!-- existing: Add Product -->
-            <button id="add-product-btn" class="top-admin-btn" style="display:none;">
-                Add Product
-            </button>
+                <!-- ⭐ Admin buttons – מוסתרים עד שנבדוק role ⭐ -->
+                <button id="admin-stats-btn" class="top-admin-btn" style="display: none;">
+                    System Statistics
+                </button>
 
+                <button id="add-product-btn" class="top-admin-btn" style="display: none;">
+                    Add Product
+                    <button id="sort-alpha" class="top-admin-btn">Sort A → Z</button>
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- PAGE HEADER -->
+    <section id="pageHeader">
+        <p id="welcomeMessage">Welcome!</p>
+        <h2>Why Choose "Mini"?</h2>
+        <p>Express your unique style while protecting the environment with Mini.</p>
+    </section>
+
+    <!-- PRODUCTS SECTION -->
+    <section id="product1" class="container content-section">
+        <div id="shop-items" class="shop-items"></div>
+    </section>
+
+    <!-- NEWSLETTER -->
+    <section id="newsletter" class="section-p1 section-m1">
+        <div class="newstext">
+            <h4>Sign Up For Newsletters <i class="bi bi-stars"></i></h4>
+            <p>Get E-mail updates about our latest shop and <span>special offers.</span></p>
+        </div>
+        <div class="form">
+            <input type="text" id="new" placeholder="Your email address">
+            <button onclick="thankyou();" class="normal">Sign Up</button>
+        </div>
+    </section>
+
+    <!-- JS FILES -->
+    <script src="auth-client.js"></script>
+    <script src="shop.js"></script>
+
+    <script
+        src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
+        crossorigin="anonymous">
+    </script>
+
+    <!-- ADD PRODUCT MODAL -->
+    <div id="addProductModal" class="modal-overlay">
+        <div class="modal-box">
+            <h2>Add New Product</h2>
+
+            <form id="add-product-form">
+                <input type="text" id="p-title" placeholder="Title" required>
+                <input type="number" id="p-price" placeholder="Price" required>
+                <input type="text" id="p-image" placeholder="Image URL" required>
+                <input type="number" id="p-stock" placeholder="Stock" required>
+                <textarea id="p-desc" placeholder="Description"></textarea>
+
+                <button type="submit" class="save-btn">Save Product</button>
+            </form>
+
+            <button type="button" id="closeModal" class="close-btn">Cancel</button>
         </div>
     </div>
-</section>
 
-<!-- PAGE HEADER -->
-<section id="pageHeader">
-    <p id="welcomeMessage">Welcome!</p>
-    <h2>Why Choose "Mini"?</h2>
-    <p>Express your unique style while protecting the environment with Mini.</p>
-</section>
+    <!-- EDIT PRODUCT MODAL -->
+    <div id="editProductModal" class="modal-overlay">
+        <div class="modal-box">
+            <h2>Edit Product</h2>
 
-<!-- PRODUCTS SECTION -->
-<section id="product1" class="container content-section">
-    <div id="shop-items" class="shop-items"></div>
-</section>
+            <form id="edit-product-form">
+                <input type="text" id="edit-title" placeholder="Title" required>
+                <input type="number" id="edit-price" placeholder="Price" required>
+                <input type="text" id="edit-image" placeholder="Image URL" required>
+                <input type="number" id="edit-stock" placeholder="Stock" required>
+                <textarea id="edit-desc" placeholder="Description"></textarea>
 
-<!-- NEWSLETTER -->
-<section id="newsletter" class="section-p1 section-m1">
-    <div class="newstext">
-        <h4>Sign Up For Newsletters <i class="bi bi-stars"></i></h4>
-        <p>Get E-mail updates about our latest shop and <span>special offers.</span></p>
+                <button type="submit" class="save-btn">Save Changes</button>
+            </form>
+
+            <button type="button" id="closeEditModal" class="close-btn">Cancel</button>
+        </div>
     </div>
-    <div class="form">
-        <input type="text" id="new" placeholder="Your email address">
-        <button onclick="thankyou();" class="normal">Sign Up</button>
-    </div>
-</section>
 
-<!-- JS FILES -->
-<script src="auth-client.js"></script>
-<script src="shop.js"></script>
+    <!-- SHOW ADMIN ELEMENTS -->
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            const token = localStorage.getItem("token");
+            if (!token) return;
 
-<script
-    src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
-    integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
-    crossorigin="anonymous">
-</script>
+            try {
+                const payload = JSON.parse(atob(token.split(".")[1]));
 
-<!-- ADD PRODUCT MODAL -->
-<div id="addProductModal" class="modal-overlay">
-    <div class="modal-box">
-        <h2>Add New Product</h2>
+                if (payload.role === "admin") {
+                    // Show Add Product button
+                    const addProductBtn = document.getElementById("add-product-btn");
+                    if (addProductBtn) addProductBtn.style.display = "inline-block";
 
-        <form id="add-product-form">
-            <input type="text" id="p-title" placeholder="Title" required>
-            <input type="number" id="p-price" placeholder="Price" required>
-            <input type="text" id="p-image" placeholder="Image URL" required>
-            <input type="number" id="p-stock" placeholder="Stock" required>
-            <textarea id="p-desc" placeholder="Description"></textarea>
-
-            <button type="submit" class="save-btn">Save Product</button>
-        </form>
-
-        <button type="button" id="closeModal" class="close-btn">Cancel</button>
-    </div>
-</div>
-
-<!-- EDIT PRODUCT MODAL -->
-<div id="editProductModal" class="modal-overlay">
-    <div class="modal-box">
-        <h2>Edit Product</h2>
-
-        <form id="edit-product-form">
-            <input type="text" id="edit-title" placeholder="Title" required>
-            <input type="number" id="edit-price" placeholder="Price" required>
-            <input type="text" id="edit-image" placeholder="Image URL" required>
-            <input type="number" id="edit-stock" placeholder="Stock" required>
-            <textarea id="edit-desc" placeholder="Description"></textarea>
-
-            <button type="submit" class="save-btn">Save Changes</button>
-        </form>
-
-        <button type="button" id="closeEditModal" class="close-btn">Cancel</button>
-    </div>
-</div>
-
-<!-- SHOW ADMIN ELEMENTS -->
-<script>
-document.addEventListener("DOMContentLoaded", () => {
-    const token = localStorage.getItem("token");
-    if (!token) return;
-
-    try {
-        const payload = JSON.parse(atob(token.split(".")[1]));
-
-        if (payload.role === "admin") {
-
-            // Show Add Product button
-            const addProductBtn = document.getElementById("add-product-btn");
-            if (addProductBtn) addProductBtn.style.display = "inline-block";
-
-            // Show System Statistics button
-            const statsBtn = document.getElementById("admin-stats-btn");
-            if (statsBtn) {
-                statsBtn.style.display = "inline-block";
-                statsBtn.addEventListener("click", () => {
-                    window.location.href = "stats.html";
-                });
+                    // Show System Statistics button
+                    const statsBtn = document.getElementById("admin-stats-btn");
+                    if (statsBtn) {
+                        statsBtn.style.display = "inline-block";
+                        statsBtn.addEventListener("click", () => {
+                            window.location.href = "stats.html";
+                        });
+                    }
+                }
+            } catch (err) {
+                console.error("Invalid token", err);
             }
-        }
-    } catch (err) {
-        console.error("Invalid token", err);
-    }
-});
-</script>
+        });
+    </script>
 
 </body>
 </html>

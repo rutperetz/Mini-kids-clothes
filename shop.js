@@ -1,3 +1,8 @@
+// =========================================
+// GLOBAL array for sorting
+// =========================================
+let allProducts = [];
+
 // ==============================
 // Load products from the server
 // ==============================
@@ -10,8 +15,9 @@ async function loadProducts() {
             return;
         }
 
-        const products = await res.json();
-        renderProducts(products);
+        allProducts = await res.json();  // שמירה לשימוש במיון
+        renderProducts(allProducts);
+
     } catch (err) {
         console.error("Error loading products:", err);
     }
@@ -27,7 +33,6 @@ function renderProducts(products) {
     const token = localStorage.getItem("token");
     let role = null;
 
-    // שליפת role מתוך הטוקן (JWT)
     if (token) {
         const payload = JSON.parse(atob(token.split(".")[1]));
         role = payload.role;
@@ -72,26 +77,29 @@ function renderProducts(products) {
 document.addEventListener("DOMContentLoaded", loadProducts);
 
 // ==================================
-// Show admin buttons + Admin link
+// Show admin elements
 // ==================================
 document.addEventListener("DOMContentLoaded", () => {
     const token = localStorage.getItem("token");
-    const adminLink = document.getElementById("adminLink");
     const addBtn = document.getElementById("add-product-btn");
+    const statsBtn = document.getElementById("admin-stats-btn");
 
-    // אם אין טוקן – להסתיר אלמנטים של אדמין
     if (!token) {
-        if (adminLink) adminLink.style.display = "none";
         if (addBtn) addBtn.style.display = "none";
+        if (statsBtn) statsBtn.style.display = "none";
         return;
     }
 
-    // פענוח ה-JWT
     const payload = JSON.parse(atob(token.split(".")[1]));
 
     if (payload.role === "admin") {
-        if (adminLink) adminLink.style.display = "inline-block"; // קישור ל-stats.html
-        if (addBtn) addBtn.style.display = "inline-block";       // כפתור הוספת מוצר
+        if (addBtn) addBtn.style.display = "inline-block";
+        if (statsBtn) {
+            statsBtn.style.display = "inline-block";
+            statsBtn.addEventListener("click", () => {
+                window.location.href = "stats.html";
+            });
+        }
     }
 });
 
@@ -108,7 +116,7 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 // ==================================
-// Close "Add Product" modal
+// Close Add modal
 // ==================================
 document.addEventListener("DOMContentLoaded", () => {
     const closeBtn = document.getElementById("closeModal");
@@ -122,7 +130,7 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 // ==================================
-// Submit "Add Product" form
+// Submit "Add Product"
 // ==================================
 document.addEventListener("DOMContentLoaded", () => {
     const addForm = document.getElementById("add-product-form");
@@ -141,7 +149,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 description: document.getElementById("p-desc").value,
             };
 
-            const res = await fetch("http://localhost:3000/api/products", {
+            await fetch("http://localhost:3000/api/products", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
@@ -149,8 +157,6 @@ document.addEventListener("DOMContentLoaded", () => {
                 },
                 body: JSON.stringify(newProduct),
             });
-
-            console.log("Server response:", res.status);
 
             alert("Product added!");
             location.reload();
@@ -171,9 +177,7 @@ document.addEventListener("click", async (e) => {
 
     await fetch(`http://localhost:3000/api/products/${id}`, {
         method: "DELETE",
-        headers: {
-            Authorization: "Bearer " + token,
-        },
+        headers: { Authorization: "Bearer " + token },
     });
 
     alert("Product deleted!");
@@ -181,7 +185,7 @@ document.addEventListener("click", async (e) => {
 });
 
 // ==================================
-// Open "Edit Product" modal + fill data
+// Edit Modal – open & fill
 // ==================================
 document.addEventListener("click", async (e) => {
     const editBtn = e.target.closest(".admin-edit-btn");
@@ -189,26 +193,22 @@ document.addEventListener("click", async (e) => {
 
     const id = editBtn.getAttribute("data-id");
 
-    // Fetch product from server
     const res = await fetch(`http://localhost:3000/api/products/${id}`);
     const product = await res.json();
 
-    // Fill modal fields
     document.getElementById("edit-title").value = product.title;
     document.getElementById("edit-price").value = product.price;
     document.getElementById("edit-image").value = product.imageUrl;
     document.getElementById("edit-stock").value = product.stock;
     document.getElementById("edit-desc").value = product.description;
 
-    // Save ID on the form
     document.getElementById("edit-product-form").setAttribute("data-id", id);
 
-    // Open modal
     document.getElementById("editProductModal").style.display = "flex";
 });
 
 // ==================================
-// Close "Edit Product" modal
+// Close Edit modal
 // ==================================
 document.addEventListener("DOMContentLoaded", () => {
     const closeEditBtn = document.getElementById("closeEditModal");
@@ -220,7 +220,7 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 // ==================================
-// Submit "Edit Product" form
+// Submit Edit
 // ==================================
 document.addEventListener("DOMContentLoaded", () => {
     const editForm = document.getElementById("edit-product-form");
@@ -240,7 +240,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 description: document.getElementById("edit-desc").value,
             };
 
-            const res = await fetch(`http://localhost:3000/api/products/${id}`, {
+            await fetch(`http://localhost:3000/api/products/${id}`, {
                 method: "PUT",
                 headers: {
                     "Content-Type": "application/json",
@@ -248,8 +248,6 @@ document.addEventListener("DOMContentLoaded", () => {
                 },
                 body: JSON.stringify(updatedProduct),
             });
-
-            console.log("UPDATE STATUS:", res.status);
 
             alert("Product updated!");
             document.getElementById("editProductModal").style.display = "none";
@@ -260,7 +258,7 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 // ==================================
-// Add item to cart
+// Add to cart
 // ==================================
 document.addEventListener("click", async (e) => {
     if (!e.target.classList.contains("shop-item-button")) return;
@@ -272,13 +270,27 @@ document.addEventListener("click", async (e) => {
     const payload = JSON.parse(atob(token.split(".")[1]));
     const userId = payload.id;
 
-    const res = await fetch("http://localhost:3000/api/cart/add", {
+    await fetch("http://localhost:3000/api/cart/add", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ userId, productId }),
     });
 
-    const data = await res.json();
-    console.log("Cart updated:", data);
     alert("Product added to cart!");
+});
+
+// ==================================
+// SORT A → Z (by title)
+// ==================================
+document.addEventListener("DOMContentLoaded", () => {
+    const btnAlpha = document.getElementById("sort-alpha");
+
+    if (btnAlpha) {
+        btnAlpha.addEventListener("click", () => {
+            const sorted = [...allProducts].sort((a, b) =>
+                a.title.localeCompare(b.title)
+            );
+            renderProducts(sorted);
+        });
+    }
 });
