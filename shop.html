@@ -37,27 +37,26 @@
             <li><a href="store.html">Home</a></li>
             <li><a class="active" href="shop.html">Shop</a></li>
 
-            <!-- Admin link in navbar (hidden by default) -->
-            <li>
-                <a id="adminLink" href="stats.html" style="display:none;">Admin Panel</a>
-            </li>
-
+            <!-- ❌ Admin Panel LINK removed (כדי שלא יהיה כפול) -->
+            
             <!-- Icons -->
             <li id="logIn"><a href="logIn.html"><i class="bi bi-person-fill"></i></a></li>
             <li><a href="cart.html"><i class="bi bi-bag"></i></a></li>
         </ul>
 
-        <!-- Admin buttons (top right, above products) -->
+        <!-- Admin buttons (top right) -->
         <div class="add-product-container">
+
             <!-- NEW: button for stats page -->
             <button id="admin-stats-btn" class="top-admin-btn" style="display:none;">
                 System Statistics
             </button>
 
-            <!-- existing button: add product -->
+            <!-- existing: Add Product -->
             <button id="add-product-btn" class="top-admin-btn" style="display:none;">
                 Add Product
             </button>
+
         </div>
     </div>
 </section>
@@ -134,7 +133,7 @@
     </div>
 </div>
 
-<!-- SHOW ADMIN ELEMENTS (navbar link + buttons) -->
+<!-- SHOW ADMIN ELEMENTS -->
 <script>
 document.addEventListener("DOMContentLoaded", () => {
     const token = localStorage.getItem("token");
@@ -144,19 +143,12 @@ document.addEventListener("DOMContentLoaded", () => {
         const payload = JSON.parse(atob(token.split(".")[1]));
 
         if (payload.role === "admin") {
-            // show link in navbar
-            const adminLink = document.getElementById("adminLink");
-            if (adminLink) {
-                adminLink.style.display = "inline-block";
-            }
 
-            // show Add Product button
+            // Show Add Product button
             const addProductBtn = document.getElementById("add-product-btn");
-            if (addProductBtn) {
-                addProductBtn.style.display = "inline-block";
-            }
+            if (addProductBtn) addProductBtn.style.display = "inline-block";
 
-            // show System Statistics button + click handler
+            // Show System Statistics button
             const statsBtn = document.getElementById("admin-stats-btn");
             if (statsBtn) {
                 statsBtn.style.display = "inline-block";
