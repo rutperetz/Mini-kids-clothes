@@ -60,3 +60,43 @@ router.post("/remove", async (req, res) => {
     }
 });
 
+router.post("/increase", async (req, res) => {
+    try {
+        const { userId, productId } = req.body;
+        const user = await User.findById(userId);
+
+        const item = user.cart.find(i => i.productId == productId);
+        if (item) {
+            item.quantity += 1;
+            await user.save();
+        }
+
+        res.json({ ok: true, cart: user.cart });
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
+});
+
+router.post("/decrease", async (req, res) => {
+    try {
+        const { userId, productId } = req.body;
+        const user = await User.findById(userId);
+
+        const item = user.cart.find(i => i.productId == productId);
+        if (item) {
+
+            if (item.quantity > 1) {
+                item.quantity -= 1;
+            } else {
+                // If the quantity drops to zero — delete from cart
+                user.cart = user.cart.filter(i => i.productId != productId);
+            }
+
+            await user.save();
+        }
+
+        res.json({ ok: true, cart: user.cart });
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
+});

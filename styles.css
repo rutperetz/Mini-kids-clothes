@@ -679,3 +679,26 @@ left: 20px;
     border-radius: 8px;
     cursor: pointer;
 }
+
+
+/*Design quantity buttons in the cart page*/
+.qty-btn {
+    background-color: #d4a59a;
+    color: white;
+    border: none;
+    padding: 4px 10px;
+    margin: 0 5px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+.qty-btn:hover {
+    background-color: #bb8f84;
+}
+
+.item-qty {
+    font-size: 16px;
+    font-weight: bold;
+    margin: 0 8px;
+}
