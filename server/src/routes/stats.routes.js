@@ -31,10 +31,7 @@ router.get("/users-by-month", async (req, res) => {
   }
 });
 
-/**
- * 2) סיכום על המוצרים
- *    GET /api/stats/products-summary
- */
+
 router.get("/products-summary", async (req, res) => {
   try {
     const result = await Product.aggregate([

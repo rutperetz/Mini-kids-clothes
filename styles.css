@@ -702,3 +702,59 @@ left: 20px;
     font-weight: bold;
     margin: 0 8px;
 }
+
+
+
+
+
+/********** Stats Page ***********/
+
+.stats-page {
+    background: #f9f9f9;
+    padding: 40px 20px;
+    min-height: 100vh;
+}
+.stats-page h1 {
+    color: #333;
+    margin-bottom: 30px;
+    text-align: center;
+    font-size: 42px;   
+}
+
+.stats-page .box {
+    background: white;
+    padding: 20px;
+    border-radius: 12px;
+    margin: 30px auto;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    width: 80%;         
+    max-width: 900px;
+}
+
+.stats-page h2 {
+    margin-bottom: 15px;
+    color: #444;
+    font-size: 26px;
+}
+
+.stats-page table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 15px;
+}
+
+.stats-page th,
+.stats-page td {
+    padding: 12px;
+    border: 1px solid #ddd;
+    text-align: center;
+}
+
+.stats-page th {
+    background: #333;
+    color: white;
+}
+
+.stats-page td {
+    background: #fafafa;
+}

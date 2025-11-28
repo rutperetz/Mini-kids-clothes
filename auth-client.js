@@ -18,7 +18,7 @@ function isAdmin() {
 //Updates the top menu
 function updateNavbar() {
     const user = getCurrentUser();
-    const logInLi = document.getElementById("logIn"); // כבר קיים אצלך ב-HTML
+    const logInLi = document.getElementById("logIn"); 
 
     if (!logInLi) return;
 

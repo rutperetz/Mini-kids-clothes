@@ -1,11 +1,7 @@
-// =========================================
 // GLOBAL array for sorting
-// =========================================
 let allProducts = [];
 
-// ==============================
 // Load products from the server
-// ==============================
 async function loadProducts() {
     try {
         const res = await fetch("http://localhost:3000/api/products");
@@ -15,7 +11,7 @@ async function loadProducts() {
             return;
         }
 
-        allProducts = await res.json();  // שמירה לשימוש במיון
+        allProducts = await res.json();  
         renderProducts(allProducts);
 
     } catch (err) {
@@ -26,23 +22,19 @@ async function loadProducts() {
 
 }
 
-// =======================================================
 // Convert USD → ILS using public exchange-rate API
-// =======================================================
 let useILS = false;
 async function convertToILS(priceUSD) {
     const res = await fetch("https://api.exchangerate-api.com/v4/latest/USD");
     const data = await res.json();
 
-    const rateILS = data.rates.ILS;   // כמה שקלים = דולר אחד
+    const rateILS = data.rates.ILS;   
     const priceILS = priceUSD * rateILS;
 
     return priceILS.toFixed(2);
 }
 
-// =======================================================
 // Weather API – get Tel Aviv temperature
-// =======================================================
 async function getWeather() {
     const url =
       "https://api.open-meteo.com/v1/forecast?latitude=32.0853&longitude=34.7818&current_weather=true";
@@ -59,9 +51,7 @@ async function getWeather() {
 }
 
 
-// ==================================
 // Render products on the page
-// ==================================
 function renderProducts(products) {
     const container = document.getElementById("shop-items");
     container.innerHTML = "";
@@ -110,9 +100,7 @@ function renderProducts(products) {
     if (typeof ready === "function") ready();
 }
 
-// ==================================
 // Update prices according to selected currency
-// ==================================
 async function updatePricesDisplay() {
     const priceElements = document.querySelectorAll(".shop-item-price");
 
@@ -134,9 +122,7 @@ async function updatePricesDisplay() {
 }
 
 
-// ==================================
 // On page load – load products
-// ==================================
 document.addEventListener("DOMContentLoaded", loadProducts);
 
 //  DOMContentLoaded – Show weather
@@ -149,9 +135,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     }
 });
 
-// ==================================
 // Show admin elements
-// ==================================
 document.addEventListener("DOMContentLoaded", () => {
     const token = localStorage.getItem("token");
     const addBtn = document.getElementById("add-product-btn");
@@ -176,9 +160,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 });
 
-// ==================================
 // Open "Add Product" modal
-// ==================================
 document.addEventListener("DOMContentLoaded", () => {
     const addBtn = document.getElementById("add-product-btn");
     if (addBtn) {
@@ -188,9 +170,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 });
 
-// ==================================
 // Close Add modal
-// ==================================
 document.addEventListener("DOMContentLoaded", () => {
     const closeBtn = document.getElementById("closeModal");
     const modal = document.getElementById("addProductModal");
@@ -202,9 +182,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 });
 
-// ==================================
 // Submit "Add Product"
-// ==================================
 document.addEventListener("DOMContentLoaded", () => {
     const addForm = document.getElementById("add-product-form");
 
@@ -237,9 +215,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 });
 
-// ==================================
 // Delete product
-// ==================================
 document.addEventListener("click", async (e) => {
     if (!e.target.classList.contains("admin-delete-btn")) return;
 
@@ -257,9 +233,7 @@ document.addEventListener("click", async (e) => {
     loadProducts();
 });
 
-// ==================================
 // Toggle currency button (USD ↔ ILS)
-// ==================================
 document.addEventListener("DOMContentLoaded", () => {
     const btn = document.getElementById("toggle-currency-btn");
 
@@ -272,9 +246,7 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 
-// ==================================
 // Edit Modal – open & fill
-// ==================================
 document.addEventListener("click", async (e) => {
     const editBtn = e.target.closest(".admin-edit-btn");
     if (!editBtn) return;
@@ -295,9 +267,7 @@ document.addEventListener("click", async (e) => {
     document.getElementById("editProductModal").style.display = "flex";
 });
 
-// ==================================
 // Close Edit modal
-// ==================================
 document.addEventListener("DOMContentLoaded", () => {
     const closeEditBtn = document.getElementById("closeEditModal");
     if (closeEditBtn) {
@@ -307,9 +277,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 });
 
-// ==================================
 // Submit Edit
-// ==================================
 document.addEventListener("DOMContentLoaded", () => {
     const editForm = document.getElementById("edit-product-form");
 
@@ -345,9 +313,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 });
 
-// ==================================
 // Add to cart
-// ==================================
 document.addEventListener("click", async (e) => {
     if (!e.target.classList.contains("shop-item-button")) return;
 
@@ -367,9 +333,8 @@ document.addEventListener("click", async (e) => {
     alert("Product added to cart!");
 });
 
-// ==================================
+
 // SORT A → Z (by title)
-// ==================================
 document.addEventListener("DOMContentLoaded", () => {
     const btnAlpha = document.getElementById("sort-alpha");
 
@@ -378,6 +343,20 @@ document.addEventListener("DOMContentLoaded", () => {
             const sorted = [...allProducts].sort((a, b) =>
                 a.title.localeCompare(b.title)
             );
+            renderProducts(sorted);
+        });
+    }
+});
+
+
+// SORT BY PRICE ↑ (Low → High)
+document.addEventListener("DOMContentLoaded", () => {
+    const btnPrice = document.getElementById("sort-price-asc");
+
+    if (btnPrice) {
+        btnPrice.addEventListener("click", () => {
+         
+            const sorted = [...allProducts].sort((a, b) => a.price - b.price);
             renderProducts(sorted);
         });
     }

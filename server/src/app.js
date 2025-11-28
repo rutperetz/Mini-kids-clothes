@@ -8,7 +8,7 @@ import usersRouter from "./routes/users.routes.js";
 import cartRouter from "./routes/cart.routes.js";
 import ordersRouter from "./routes/orders.routes.js";
 import statsRouter from "./routes/stats.routes.js";  
-//                         
+                         
 
 
 const app = express();
@@ -33,7 +33,7 @@ app.use("/api/users", usersRouter);
 app.use("/api/cart", cartRouter);
 app.use("/api/orders", ordersRouter);
 app.use("/api/stats", statsRouter);   
-//                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
 
 export default app;
 
