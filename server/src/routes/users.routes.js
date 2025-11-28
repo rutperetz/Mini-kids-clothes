@@ -6,7 +6,7 @@ import { User } from "../models/User.js";
 const router = express.Router();
 
 /**
- * 1) כמה משתמשים נרשמו בכל חודש (AGGREGATE על User)
+ 
  *    GET /api/stats/users-by-month
  */
 router.get("/users-by-month", async (req, res) => {
@@ -32,8 +32,7 @@ router.get("/users-by-month", async (req, res) => {
 });
 
 /**
- * 2) סיכום על כל המוצרים (AGGREGATE על Product)
- *    כמה מוצרים, כמה סטוק כולל, ממוצע/מינימום/מקסימום מחיר
+ * 
  *    GET /api/stats/products-summary
  */
 router.get("/products-summary", async (req, res) => {
@@ -51,8 +50,7 @@ router.get("/products-summary", async (req, res) => {
       },
     ]);
 
-    // נחזיר אובייקט אחד במקום מערך עם איבר יחיד
-    res.json(result[0] || {
+  res.json(result[0] || {
       totalProducts: 0,
       totalStock: 0,
       avgPrice: 0,

@@ -5,8 +5,8 @@ import { User } from "../models/User.js";
 
 const router = express.Router();
 
-/**
- * 1) כמה משתמשים נרשמו בכל חודש
+/** 
+
  *    GET /api/stats/users-by-month
  */
 router.get("/users-by-month", async (req, res) => {
@@ -65,5 +65,5 @@ router.get("/products-summary", async (req, res) => {
   }
 });
 
-// 👈 זה החלק החשוב בשביל השגיאה שלך
+
 export default router;

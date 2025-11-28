@@ -21,7 +21,43 @@ async function loadProducts() {
     } catch (err) {
         console.error("Error loading products:", err);
     }
+    renderProducts(allProducts);
+    await updatePricesDisplay();
+
 }
+
+// =======================================================
+// Convert USD → ILS using public exchange-rate API
+// =======================================================
+let useILS = false;
+async function convertToILS(priceUSD) {
+    const res = await fetch("https://api.exchangerate-api.com/v4/latest/USD");
+    const data = await res.json();
+
+    const rateILS = data.rates.ILS;   // כמה שקלים = דולר אחד
+    const priceILS = priceUSD * rateILS;
+
+    return priceILS.toFixed(2);
+}
+
+// =======================================================
+// Weather API – get Tel Aviv temperature
+// =======================================================
+async function getWeather() {
+    const url =
+      "https://api.open-meteo.com/v1/forecast?latitude=32.0853&longitude=34.7818&current_weather=true";
+
+    try {
+        const res = await fetch(url);
+        const data = await res.json();
+
+        return data.current_weather.temperature;
+    } catch (err) {
+        console.error("Weather API error:", err);
+        return null;
+    }
+}
+
 
 // ==================================
 // Render products on the page
@@ -49,7 +85,10 @@ function renderProducts(products) {
             <span class="shop-item-d">${product.description || ""}</span>
 
             <div class="shop-item-details">
-                <span class="shop-item-price">$${product.price}</span>
+               <span class="shop-item-price" data-price-usd="${product.price}">
+               $${product.price}
+              </span>
+
                 <button class="btn btn-primary shop-item-button">ADD TO CART</button>
             </div>
 
@@ -72,9 +111,43 @@ function renderProducts(products) {
 }
 
 // ==================================
+// Update prices according to selected currency
+// ==================================
+async function updatePricesDisplay() {
+    const priceElements = document.querySelectorAll(".shop-item-price");
+
+    for (const el of priceElements) {
+        const priceUSD = Number(el.getAttribute("data-price-usd"));
+
+        if (useILS) {
+            const ils = await convertToILS(priceUSD);
+            el.textContent = `${ils} ₪`;
+        } else {
+            el.textContent = `$${priceUSD}`;
+        }
+    }
+
+    const btn = document.getElementById("toggle-currency-btn");
+    if (btn) {
+        btn.textContent = useILS ? "Show in $" : "Show in ₪";
+    }
+}
+
+
+// ==================================
 // On page load – load products
 // ==================================
 document.addEventListener("DOMContentLoaded", loadProducts);
+
+//  DOMContentLoaded – Show weather
+document.addEventListener("DOMContentLoaded", async () => {
+    const temp = await getWeather();
+    const weatherBox = document.getElementById("weather-info");
+
+    if (weatherBox && temp !== null) {
+        weatherBox.textContent = `Today's temperature: ${temp}°C`;
+    }
+});
 
 // ==================================
 // Show admin elements
@@ -183,6 +256,21 @@ document.addEventListener("click", async (e) => {
     alert("Product deleted!");
     loadProducts();
 });
+
+// ==================================
+// Toggle currency button (USD ↔ ILS)
+// ==================================
+document.addEventListener("DOMContentLoaded", () => {
+    const btn = document.getElementById("toggle-currency-btn");
+
+    if (btn) {
+        btn.addEventListener("click", async () => {
+            useILS = !useILS;   // החלפת מצב
+            await updatePricesDisplay();
+        });
+    }
+});
+
 
 // ==================================
 // Edit Modal – open & fill

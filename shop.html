@@ -39,7 +39,7 @@
                 <li><a href="store.html">Home</a></li>
                 <li><a class="active" href="shop.html">Shop</a></li>
 
-                <!-- Admin link הוסר כדי שלא יהיה כפול -->
+                <!-- Admin link-->
                 
                 <!-- Icons -->
                 <li id="logIn">
@@ -53,12 +53,12 @@
             <!-- TOP BUTTONS -->
             <div class="add-product-container">
 
-                <!-- ⭐ Sort button – זמין לכל המשתמשים ⭐ -->
+                <!--  Sort button – -->
                 <button id="sort-price-asc" class="top-admin-btn">
                     Sort by Price ↑
                 </button>
 
-                <!-- ⭐ Admin buttons – מוסתרים עד שנבדוק role ⭐ -->
+                <!--  Admin buttons  -->
                 <button id="admin-stats-btn" class="top-admin-btn" style="display: none;">
                     System Statistics
                 </button>
@@ -80,8 +80,20 @@
 
     <!-- PRODUCTS SECTION -->
     <section id="product1" class="container content-section">
-        <div id="shop-items" class="shop-items"></div>
-    </section>
+
+    <!--  Currency Toggle Button  -->
+    <button id="toggle-currency-btn" class="btn btn-secondary" style="margin-bottom: 20px;">
+        Show in ₪
+    </button>
+
+    <p id="weather-info" style="font-size: 20px; margin-bottom: 15px; font-weight: bold;">
+    Loading weather...
+</p>
+
+
+    <div id="shop-items" class="shop-items"></div>
+</section>
+
 
     <!-- NEWSLETTER -->
     <section id="newsletter" class="section-p1 section-m1">
